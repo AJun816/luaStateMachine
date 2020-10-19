@@ -1,0 +1,91 @@
+traceprint("BeginHoldupLogcat+8613582886135828")package.path = package.path..";"..getrcpath("rc:").."?.lua" 
+
+function floatwinrun()
+    Run("经营")
+    if Unit.State.Name ~= nil then
+        while true do
+            Main()
+            sleep(3000)
+        end
+    else
+        lineprint("状态机精简模板.t",9,"状态机异常,需要使用Run方法指定入口")
+    end
+    
+end
+--状态数组
+Unit = {
+State = {}, --状态
+Param = {},	--参数
+}
+
+--初始化状态机
+Unit.State.Name = ""
+
+--状态机
+function ProcessState(stateTable, stateName, stateParam)
+    if stateTable[stateName] ~= nil then
+        return stateTable[stateName](stateParam)
+    end    
+    lineprint("状态机.t",15,"没有找到["..stateName.."]")
+    return "Error"
+end
+
+--启动状态机
+function Main()
+    --调用状态机 
+    Unit.State.Name = ProcessState(Unit.State,Unit.State.Name,Unit.Param[Unit.State.Name])
+    sleep(50)
+end
+
+--创建任务
+function Task(name,par,fun)    
+    if fun then
+        Unit.Param[name]=par
+        Unit.Param[name]["name"]=name 
+        Unit.State[name]=fun
+    else        
+        Unit.Param[name]={}
+        Unit.Param[name]["name"]=name 
+        Unit.State[name]=par
+    end
+end
+
+--设置状态机的入口
+function Run(name)
+    Unit.State.Name = name	
+end
+
+
+Task("仓库",
+function ()
+    lineprint("仓库.t",3,"商品正在储存进仓库")
+    lineprint("仓库.t",4,"仓库任务已经结束，正在进入超市任务")
+    lineprint("仓库.t",5,"=============================================")
+    return "超市"
+end
+
+)
+Task("经营",
+function ()
+    lineprint("经营.t",3,"正在经营一家大型超市")
+    lineprint("经营.t",4,"经营已经结束，正在进入运输任务")
+    lineprint("经营.t",5,"=============================================")
+    return"运输"
+end
+)
+Task("超市",
+function ()
+    lineprint("超市.t",3,"超市正在售卖仓库中的东西")
+    lineprint("超市.t",4,"超市已经结束，正在进入经营任务")
+    lineprint("超市.t",5,"=============================================")
+    return"经营"
+end
+)
+Task("运输",{str = "正在运输本月的商品",x = 10,y = 20,z = 100},
+function (str)
+    lineprint("运输.t",3,str.str..str.x..str.y..str.z)
+    lineprint("运输.t",4,"运输已经结束，正在进入仓库任务")
+    lineprint("运输.t",5,"=============================================")
+    return "仓库"
+end
+)

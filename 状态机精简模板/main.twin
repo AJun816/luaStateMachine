@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+<!-- [布局]不能放在[TAB页]外部只能放在内部 (布局不能嵌套TAB页) -->
+<!-- 点击事件为脚本中的函数名,不用加 () -->
+<!-- 下拉框点击事件填文件名,文件放在资源文件夹中,为JSON数据 -->
+<!-- 图片路径及下拉框点击事件直接写文件名,不用加文件夹名,如:img.png 或spclick.txt 或 http://www.aistool.com/assets/image/zdlogo.png -->
